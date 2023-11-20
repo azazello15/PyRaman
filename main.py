@@ -2,11 +2,12 @@ import numpy as np
 import rampy as rp
 import matplotlib.pyplot as plt
 import matplotlib
-import scipy  # For data manipulation
+import scipy
 import random
 import lmfit
 from lmfit.models import GaussianModel
 from numpy import argmax
+from numpy.core.defchararray import index
 
 matplotlib.use('TKAgg')
 
@@ -20,7 +21,7 @@ y_norm = rp.normalise(y_new, method="minmax")
 
 bir = np.array([(650, 750), (850, 900)])  # Выравнивание базовой линии
 y_corr, y_base = rp.baseline(x, y_norm, bir, 'poly', polynomial_order=3)
-lb = 720
+lb = 650
 hb = 950
 x_fit = x[np.where((x > lb) & (x < hb))]
 y_fit = y_corr[np.where((x > lb) & (x < hb))]
@@ -117,22 +118,33 @@ plt.show()
 
 '''положение максимумов спектра'''
 
-v1 = x_fit[peak1.argmax()]
-v2 = x_fit[peak2.argmax()]
-v3 = x_fit[peak3.argmax()]
-v4 = x_fit[peak4.argmax()]
+v1_1 = x_fit[peak1.argmax()]
+v1_2 = x_fit[peak2.argmax()]
+v1_3 = x_fit[peak3.argmax()]
+v1_4 = x_fit[peak4.argmax()]
 
 '''интенсивность спектра'''
 
-i1 = max(peak1)
-i2 = max(peak2)
-i3 = max(peak3)
-i4 = max(peak4)
+i1_1 = max(peak1)
+i1_2 = max(peak2)
+i1_3 = max(peak3)
+i1_4 = max(peak4)
 
 '''ширина спектральной линии'''
 
+peak_line1 = (peak1[0] + peak1[peak1.argmax()]) / len(peak1[:peak1.argmax()])
+# first_half_w1 = x_fit[peak1.argmax()] + x_fit[0] / len(peak1[:peak1.argmax()])
+# second_half_w1 = x_fit[-1] - x_fit[peak1.argmax()]
+# w1 = first_half_w1 + second_half_w1
 
+print(f'Положение максимума спектра:\n v1 = {v1_1}\n v2 = {v1_2}\n v3 = {v1_3}\n v4 = {v1_4}\n')
+print(f'Интенсивность спектра:\n i1 = {i1_1}\n i2 = {i1_2}\n i3 = {i1_3}\n i4 = {i1_4}\n')
+# print(f'Ширина спектральной полосы:\n {w1}')
+# print(f'Тестовая первая полуширина спектральной полосы {first_half_w1}')
+# print(f'Тестовая вторая полуширина спектральной полосы {second_half_w1}')
 
-print(f'Положение максимума спектра:\n v1 = {v1}\n v2 = {v2}\n v3 = {v3}\n v4 = {v4}\n')
-print(f'Интенсивность спектра:\n i1 = {i1}\n i2 = {i2}\n i3 = {i3}\n i4 = {i4}\n')
-print(x_fit[peak1.argmin()])
+print(max(peak1))
+print(peak1.argmax())
+print(max(peak1) == peak1[16102])
+print(np.where(peak1 == max(peak1)))
+
