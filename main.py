@@ -9,6 +9,8 @@ from lmfit.models import GaussianModel
 from numpy import argmax
 from numpy.core.defchararray import index
 
+import midpoint
+
 matplotlib.use('TKAgg')
 
 spectrum = np.genfromtxt("T20.txt", skip_header=10)  # Получение данных из файла
@@ -68,7 +70,7 @@ params = lmfit.Parameters()
 #               (Name,  Value,  Vary,   Min,  Max,  Expr)
 params.add_many(('a1', 10, True, 0, None, None),
                 ('f1', 765, True, 755, 770, None),
-                ('l1', 8, True, 5, 10, None),
+                ('l1', 8, True, 6, 10, None),
                 ('a2', 3.9, True, 0, None, None),
                 ('f2', 775, True, 768, 785, None),
                 ('l2', 4, True, 3, 6, None),
@@ -84,7 +86,7 @@ params['f2'].vary = False
 params['f3'].vary = False
 params['f4'].vary = False
 
-algo = 'nelder'
+algo = 'cg'
 
 result = lmfit.minimize(residual, params, method=algo, args=(x_fit, y_fit[:, 0]))
 
@@ -118,10 +120,10 @@ plt.show()
 
 '''положение максимумов спектра'''
 
-v1_1 = x_fit[peak1.argmax()]
-v1_2 = x_fit[peak2.argmax()]
-v1_3 = x_fit[peak3.argmax()]
-v1_4 = x_fit[peak4.argmax()]
+v1_1 = x_fit[np.argmax(peak1)]
+v1_2 = x_fit[np.argmax(peak2)]
+v1_3 = x_fit[np.argmax(peak3)]
+v1_4 = x_fit[np.argmax(peak4)]
 
 '''интенсивность спектра'''
 
@@ -132,19 +134,12 @@ i1_4 = max(peak4)
 
 '''ширина спектральной линии'''
 
-peak_line1 = (peak1[0] + peak1[peak1.argmax()]) / len(peak1[:peak1.argmax()])
-# first_half_w1 = x_fit[peak1.argmax()] + x_fit[0] / len(peak1[:peak1.argmax()])
-# second_half_w1 = x_fit[-1] - x_fit[peak1.argmax()]
 # w1 = first_half_w1 + second_half_w1
 
 print(f'Положение максимума спектра:\n v1 = {v1_1}\n v2 = {v1_2}\n v3 = {v1_3}\n v4 = {v1_4}\n')
 print(f'Интенсивность спектра:\n i1 = {i1_1}\n i2 = {i1_2}\n i3 = {i1_3}\n i4 = {i1_4}\n')
-# print(f'Ширина спектральной полосы:\n {w1}')
-# print(f'Тестовая первая полуширина спектральной полосы {first_half_w1}')
-# print(f'Тестовая вторая полуширина спектральной полосы {second_half_w1}')
 
-print(max(peak1))
-print(peak1.argmax())
-print(max(peak1) == peak1[16102])
-print(np.where(peak1 == max(peak1)))
-
+print(peak1[0], peak1[-1])
+print(peak2[0], peak2[-1])
+print(peak3[0], peak3[-1])
+print(peak4[0], peak4[-1])
