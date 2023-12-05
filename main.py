@@ -9,7 +9,7 @@ from lmfit.models import GaussianModel
 from numpy import argmax
 from numpy.core.defchararray import index
 
-import midpoint
+from midpoint import median
 
 matplotlib.use('TKAgg')
 
@@ -120,26 +120,54 @@ plt.show()
 
 '''положение максимумов спектра'''
 
-v1_1 = x_fit[np.argmax(peak1)]
-v1_2 = x_fit[np.argmax(peak2)]
-v1_3 = x_fit[np.argmax(peak3)]
-v1_4 = x_fit[np.argmax(peak4)]
+v1 = x_fit[np.argmax(peak1)]
+v2 = x_fit[np.argmax(peak2)]
+v3 = x_fit[np.argmax(peak3)]
+v4 = x_fit[np.argmax(peak4)]
 
 '''интенсивность спектра'''
 
-i1_1 = max(peak1)
-i1_2 = max(peak2)
-i1_3 = max(peak3)
-i1_4 = max(peak4)
+i1 = max(peak1)
+i2 = max(peak2)
+i3 = max(peak3)
+i4 = max(peak4)
 
 '''ширина спектральной линии'''
 
+midpoint1_1 = median(peak1[:np.argmax(peak1)])
+midpoint1_2 = median(peak1[np.argmax(peak1):])
+
+# нахождение полуширин
+
+midpoint2_1 = median(peak1[:np.argmax(peak2)])
+midpoint2_2 = median(peak1[np.argmax(peak2):])
+
+# нахождение полуширин
+
+midpoint3_1 = median(peak1[:np.argmax(peak3)])
+midpoint3_2 = median(peak1[np.argmax(peak3):])
+
+# нахождение полуширин
+
+midpoint4_1 = median(peak1[:np.argmax(peak4)])
+midpoint4_2 = median(peak1[np.argmax(peak4):])
+
+# нахождение полуширин
+
 # w1 = first_half_w1 + second_half_w1
+# w2 = first_half_w2 + second_half_w2
+# w3 = first_half_w3 + second_half_w3
+# w4 = first_half_w4 + second_half_w4
 
-print(f'Положение максимума спектра:\n v1 = {v1_1}\n v2 = {v1_2}\n v3 = {v1_3}\n v4 = {v1_4}\n')
-print(f'Интенсивность спектра:\n i1 = {i1_1}\n i2 = {i1_2}\n i3 = {i1_3}\n i4 = {i1_4}\n')
+print(f'Положение максимума спектра:\n v1 = {v1}\n v2 = {v2}\n v3 = {v3}\n v4 = {v4}\n')
+print(f'Интенсивность спектра:\n i1 = {i1}\n i2 = {i2}\n i3 = {i3}\n i4 = {i4}\n')
+# print(f'Ширина спектральной полосы:\n w1 = {w1}\n w2 = {w2}\n w3 = {w3}\n w4 = {w4}\n')
+print(midpoint1_1)
+print(midpoint1_2)
+print(midpoint2_1)
+print(midpoint2_2)
+print(midpoint3_1)
+print(midpoint3_2)
+print(midpoint4_1)
+print(midpoint4_2)
 
-print(peak1[0], peak1[-1])
-print(peak2[0], peak2[-1])
-print(peak3[0], peak3[-1])
-print(peak4[0], peak4[-1])
